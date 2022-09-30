@@ -227,6 +227,14 @@ fn setup_si5324_as_synthesizer(cfg: RtioClock) {
 
 pub fn init() {
     let clock_cfg = get_rtio_clock_cfg();
+
+    #[cfg(has_drtio)]
+    {
+        unsafe {
+            csr::drtio_transceiver::stable_clkin_write(1);
+        }
+    }
+
     #[cfg(si5324_as_synthesizer)]
     {
         #[cfg(all(soc_platform = "kasli", hw_rev = "v2.0"))]
